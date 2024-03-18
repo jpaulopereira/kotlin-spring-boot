@@ -1,30 +1,37 @@
 package br.com.jotape.forum.service
 
-import br.com.jotape.forum.model.Curso
+import br.com.jotape.forum.dto.NovoTopicoDTO
 import br.com.jotape.forum.model.Topico
-import br.com.jotape.forum.model.Usuario
 import org.springframework.stereotype.Service
-import java.util.*
+import kotlin.collections.ArrayList
 
 @Service
-class TopicoService {
+class TopicoService(
+    private var topicos: List<Topico> = ArrayList(),
+    private val curosService: CursoService,
+    private val usuarioService: UsuarioService
+) { // = ArrayList() inicializa a lista com um array vazio
 
     fun listar(): List<Topico> {
-        val topico = Topico(
-            id = 1,
-            titulo = "Duvida Kotlin",
-            mensagem = "Variaveis no Kotlin",
-            curso = Curso(
-                id = 1,
-                nome = "Kotlin",
-                categoria = "Programacao"
-            ),
-            autor = Usuario(
-                id = 1,
-                nome = "Silva",
-                email = "silva@email.com"
+        return topicos
+    }
+
+    fun buscarPorId(id: Long): Topico {
+        return topicos.stream().filter { topico ->
+            topico.id == id
+        }.findFirst().get()
+    }
+
+    fun cadastrar(dto: NovoTopicoDTO) {
+        //plus é usada para concatenar coleções, como listas, conjuntos ou arrays
+       topicos = topicos.plus(
+            Topico(
+                id = topicos.size.toLong() + 1,
+                titulo = dto.titulo,
+                mensagem = dto.mensagem,
+                curso = curosService.buscarPorId(dto.idCurso),
+                autor = usuarioService.buscarPorId(dto.idAutor)
             )
         )
-        return Arrays.asList(topico, topico, topico)
     }
 }
