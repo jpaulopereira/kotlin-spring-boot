@@ -1,5 +1,6 @@
 package br.com.jotape.forum.service
 
+import br.com.jotape.forum.dto.AtualizacaoTopicoDTO
 import br.com.jotape.forum.dto.NovoTopicoDTO
 import br.com.jotape.forum.dto.TopicoDTO
 import br.com.jotape.forum.mapper.NovoTopicoMapper
@@ -29,11 +30,40 @@ class TopicoService(
         return topicoViewMapper.map(topico)
     }
 
-    fun cadastrar(dto: NovoTopicoDTO) {
+    fun cadastrar(dto: NovoTopicoDTO): TopicoDTO {
         val topico = novoTopicoMapper.map(dto)
         val novoId = topicos.size.toLong() + 1
         topico.id = novoId
         //plus é usada para concatenar coleções, como listas, conjuntos ou arrays
         topicos = topicos.plus(topico)
+        return topicoViewMapper.map(topico)
+    }
+
+    fun atualizar(dto: AtualizacaoTopicoDTO): TopicoDTO {
+        val topico = topicos.stream().filter { topico ->
+            topico.id == dto.id
+        }.findFirst().get()
+
+        val topicoAtualizado = Topico(
+            id = dto.id,
+            titulo = dto.titulo,
+            mensagem = dto.mensagem,
+            autor = topico.autor,
+            curso = topico.curso,
+            respostas = topico.respostas,
+            status = topico.status,
+            dataCriacao = topico.dataCriacao
+        )
+
+        //minus(remove da lista) plus(adiciona um topico novo atualizado)
+        topicos = topicos.minus(topico).plus(topicoAtualizado)
+        return topicoViewMapper.map(topicoAtualizado)
+    }
+
+    fun deletar(id: Long) {
+        val topico = topicos.stream().filter { topico ->
+            topico.id == id
+        }.findFirst().get()
+        topicos = topicos.minus(topico)
     }
 }
