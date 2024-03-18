@@ -1,6 +1,7 @@
 package br.com.jotape.forum.controller
 
 import br.com.jotape.forum.dto.NovoTopicoDTO
+import br.com.jotape.forum.dto.TopicoDTO
 import br.com.jotape.forum.model.Topico
 import br.com.jotape.forum.service.TopicoService
 import org.springframework.web.bind.annotation.GetMapping
@@ -16,12 +17,12 @@ import org.springframework.web.bind.annotation.RestController
 class TopicoController(private val service: TopicoService) { //Declara no construtor e o Spring injeta automaticamente essa classe
 
     @GetMapping
-    fun listar(): List<Topico> {
+    fun listar(): List<TopicoDTO> {
         return service.listar()
     }
 
     @GetMapping("/{id}")
-    fun buscarPorID(@PathVariable id: Long): Topico {
+    fun buscarPorID(@PathVariable id: Long): TopicoDTO {
         return service.buscarPorId(id)
     }
 

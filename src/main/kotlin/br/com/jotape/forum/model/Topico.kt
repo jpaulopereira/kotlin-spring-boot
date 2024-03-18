@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 
 data class Topico (
     //val nomeDoAtributo: Tipagem (?)==não obrigatório = valor inicial = null
-    val id: Long? = null,
+    var id: Long? = null,
     val titulo: String,
     val mensagem: String,
     val dataCriacao: LocalDateTime = LocalDateTime.now(),
