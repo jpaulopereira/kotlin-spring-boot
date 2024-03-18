@@ -3,6 +3,7 @@ package br.com.jotape.forum.service
 import br.com.jotape.forum.dto.AtualizacaoTopicoDTO
 import br.com.jotape.forum.dto.NovoTopicoDTO
 import br.com.jotape.forum.dto.TopicoDTO
+import br.com.jotape.forum.exception.NotFoundException
 import br.com.jotape.forum.mapper.NovoTopicoMapper
 import br.com.jotape.forum.mapper.TopicoViewMapper
 import br.com.jotape.forum.model.Topico
@@ -14,7 +15,8 @@ import kotlin.collections.ArrayList
 class TopicoService(
     private var topicos: List<Topico> = ArrayList(),
     private val topicoViewMapper: TopicoViewMapper,
-    private val novoTopicoMapper: NovoTopicoMapper
+    private val novoTopicoMapper: NovoTopicoMapper,
+    private val notFoundMessage: String = "Topico não Encontrado"
 ) { // = ArrayList() inicializa a lista com um array vazio
 
     fun listar(): List<TopicoDTO> {
@@ -42,7 +44,7 @@ class TopicoService(
     fun atualizar(dto: AtualizacaoTopicoDTO): TopicoDTO {
         val topico = topicos.stream().filter { topico ->
             topico.id == dto.id
-        }.findFirst().get()
+        }.findFirst().orElseThrow{(NotFoundException(notFoundMessage))}
 
         val topicoAtualizado = Topico(
             id = dto.id,
@@ -63,7 +65,7 @@ class TopicoService(
     fun deletar(id: Long) {
         val topico = topicos.stream().filter { topico ->
             topico.id == id
-        }.findFirst().get()
+        }.findFirst().orElseThrow{(NotFoundException(notFoundMessage))}
         topicos = topicos.minus(topico)
     }
 }
