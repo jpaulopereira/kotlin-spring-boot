@@ -1,24 +1,14 @@
 package br.com.jotape.forum.service
 
 import br.com.jotape.forum.model.Usuario
+import br.com.jotape.forum.repository.UsuarioRepository
 import org.springframework.stereotype.Service
 
 @Service
-class UsuarioService (private var usuarios: List<Usuario>) {
-
-    init {
-        val autor = Usuario(
-            id = 1,
-            nome = "Kotlin",
-            email = "usuario@gmail.com"
-        )
-        usuarios = listOf(autor)
-    }
+class UsuarioService (private val usuarioRepository: UsuarioRepository){
 
     fun buscarPorId(id: Long): Usuario {
-        return usuarios.stream().filter { usuario ->
-            usuario.id == id
-        }.findFirst().get()
+       return usuarioRepository.findById(id).orElse(null)
     }
 }
 

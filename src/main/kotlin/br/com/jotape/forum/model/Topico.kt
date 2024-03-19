@@ -10,8 +10,8 @@ data class Topico (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY )
     var id: Long? = null,
-    val titulo: String,
-    val mensagem: String,
+    var titulo: String,
+    var mensagem: String,
     val dataCriacao: LocalDateTime = LocalDateTime.now(),
 
     @ManyToOne //Um tópico pertence a um único curso
