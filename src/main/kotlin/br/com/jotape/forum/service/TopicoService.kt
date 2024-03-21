@@ -8,6 +8,7 @@ import br.com.jotape.forum.exception.NotFoundException
 import br.com.jotape.forum.mapper.NovoTopicoMapper
 import br.com.jotape.forum.mapper.TopicoViewMapper
 import br.com.jotape.forum.repository.TopicoRepository
+import jakarta.persistence.EntityManager
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -18,6 +19,7 @@ class TopicoService(
     private val topicoViewMapper: TopicoViewMapper,
     private val novoTopicoMapper: NovoTopicoMapper,
     private val notFoundMessage: String = "Topico não Encontrado",
+    private val em: EntityManager //interface usada para interagir com o banco de dados, como inserção, atualização, exclusão e busca de entidades no banco de dados
 ) {
 
     fun listar(
