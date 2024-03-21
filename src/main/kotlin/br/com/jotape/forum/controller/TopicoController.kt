@@ -5,6 +5,8 @@ import br.com.jotape.forum.dto.NovoTopicoDTO
 import br.com.jotape.forum.dto.TopicoDTO
 import br.com.jotape.forum.service.TopicoService
 import jakarta.validation.Valid
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
@@ -30,6 +32,8 @@ import org.springframework.web.util.UriComponentsBuilder
 class TopicoController(private val service: TopicoService) { //Declara no construtor e o Spring injeta automaticamente essa classe
 
     @GetMapping
+    @Cacheable("topicos")
+    @CacheEvict(value = ["topicos"], allEntries = true)
     fun listar(
         @RequestParam(required = false) nomeCurso: String?,
        @PageableDefault(size = 5, sort = ["dataCriacao"], direction = Sort.Direction.DESC) paginacao: Pageable
@@ -55,12 +59,16 @@ class TopicoController(private val service: TopicoService) { //Declara no constr
 
     @Transactional
     @PutMapping
+    @Cacheable("topicos")
+    @CacheEvict(value = ["topicos"], allEntries = true)
     fun atualizar(@RequestBody @Valid dto: AtualizacaoTopicoDTO): ResponseEntity<TopicoDTO> {
         val topicoDTO = service.atualizar(dto)
         return ResponseEntity.ok(topicoDTO)
     }
 
     @Transactional
+    @Cacheable("topicos")
+    @CacheEvict(value = ["topicos"], allEntries = true)
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deletar(@PathVariable id: Long) {
