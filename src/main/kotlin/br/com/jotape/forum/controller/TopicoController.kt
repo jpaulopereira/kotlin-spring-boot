@@ -5,6 +5,10 @@ import br.com.jotape.forum.dto.NovoTopicoDTO
 import br.com.jotape.forum.dto.TopicoDTO
 import br.com.jotape.forum.service.TopicoService
 import jakarta.validation.Valid
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.transaction.annotation.Transactional
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.util.UriComponentsBuilder
@@ -25,8 +30,11 @@ import org.springframework.web.util.UriComponentsBuilder
 class TopicoController(private val service: TopicoService) { //Declara no construtor e o Spring injeta automaticamente essa classe
 
     @GetMapping
-    fun listar(): List<TopicoDTO> {
-        return service.listar()
+    fun listar(
+        @RequestParam(required = false) nomeCurso: String?,
+       @PageableDefault(size = 5, sort = ["dataCriacao"], direction = Sort.Direction.DESC) paginacao: Pageable
+    ): Page<TopicoDTO> {
+        return service.listar(nomeCurso, paginacao)
     }
 
     @GetMapping("/{id}")
@@ -48,7 +56,7 @@ class TopicoController(private val service: TopicoService) { //Declara no constr
     @Transactional
     @PutMapping
     fun atualizar(@RequestBody @Valid dto: AtualizacaoTopicoDTO): ResponseEntity<TopicoDTO> {
-       val topicoDTO = service.atualizar(dto)
+        val topicoDTO = service.atualizar(dto)
         return ResponseEntity.ok(topicoDTO)
     }
 

@@ -7,6 +7,8 @@ import br.com.jotape.forum.exception.NotFoundException
 import br.com.jotape.forum.mapper.NovoTopicoMapper
 import br.com.jotape.forum.mapper.TopicoViewMapper
 import br.com.jotape.forum.repository.TopicoRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.util.stream.Collectors
 
@@ -17,12 +19,19 @@ class TopicoService(
     private val novoTopicoMapper: NovoTopicoMapper,
     private val notFoundMessage: String = "Topico não Encontrado"
 ) {
-
-    fun listar(): List<TopicoDTO> {
-        return topicoRepository
-            .findAll().stream().map { topico ->
+    fun listar(
+        nomeCurso: String?,
+        paginacao: Pageable
+    ): Page<TopicoDTO> {
+        val topicos = if (nomeCurso == null) {
+            topicoRepository.findAll(paginacao)
+        } else {
+            topicoRepository.findByCursoNome(nomeCurso, paginacao)
+        }
+        return topicos
+            .map { topico ->
                 topicoViewMapper.map(topico)
-            }.collect(Collectors.toList())
+            }
     }
 
     fun buscarPorId(id: Long): TopicoDTO {
