@@ -3,6 +3,7 @@ package br.com.jotape.forum.controller
 import br.com.jotape.forum.dto.AtualizacaoTopicoDTO
 import br.com.jotape.forum.dto.NovoTopicoDTO
 import br.com.jotape.forum.dto.TopicoDTO
+import br.com.jotape.forum.dto.TopicoPorCategoriaDTO
 import br.com.jotape.forum.service.TopicoService
 import jakarta.validation.Valid
 import org.springframework.cache.annotation.CacheEvict
@@ -73,5 +74,10 @@ class TopicoController(private val service: TopicoService) { //Declara no constr
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deletar(@PathVariable id: Long) {
         service.deletar(id)
+    }
+
+    @GetMapping("/relatorio")
+    fun relatorio(): List<TopicoPorCategoriaDTO> {
+        return service.relatorio()
     }
 }

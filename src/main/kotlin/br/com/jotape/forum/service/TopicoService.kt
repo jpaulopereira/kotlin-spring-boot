@@ -3,6 +3,7 @@ package br.com.jotape.forum.service
 import br.com.jotape.forum.dto.AtualizacaoTopicoDTO
 import br.com.jotape.forum.dto.NovoTopicoDTO
 import br.com.jotape.forum.dto.TopicoDTO
+import br.com.jotape.forum.dto.TopicoPorCategoriaDTO
 import br.com.jotape.forum.exception.NotFoundException
 import br.com.jotape.forum.mapper.NovoTopicoMapper
 import br.com.jotape.forum.mapper.TopicoViewMapper
@@ -10,15 +11,15 @@ import br.com.jotape.forum.repository.TopicoRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
-import java.util.stream.Collectors
 
 @Service
 class TopicoService(
     private val topicoRepository: TopicoRepository,
     private val topicoViewMapper: TopicoViewMapper,
     private val novoTopicoMapper: NovoTopicoMapper,
-    private val notFoundMessage: String = "Topico não Encontrado"
+    private val notFoundMessage: String = "Topico não Encontrado",
 ) {
+
     fun listar(
         nomeCurso: String?,
         paginacao: Pageable
@@ -67,4 +68,9 @@ class TopicoService(
     fun deletar(id: Long) {
         topicoRepository.deleteById(id)
     }
+
+    fun relatorio(): List<TopicoPorCategoriaDTO>{
+       return topicoRepository.relatorio()
+    }
+
 }
