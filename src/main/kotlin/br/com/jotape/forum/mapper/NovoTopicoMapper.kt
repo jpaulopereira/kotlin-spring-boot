@@ -1,7 +1,6 @@
 package br.com.jotape.forum.mapper
 
 import br.com.jotape.forum.dto.NovoTopicoDTO
-import br.com.jotape.forum.dto.TopicoDTO
 import br.com.jotape.forum.model.Topico
 import br.com.jotape.forum.service.CursoService
 import br.com.jotape.forum.service.UsuarioService

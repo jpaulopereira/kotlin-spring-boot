@@ -19,7 +19,7 @@ class TopicoService(
     private val topicoViewMapper: TopicoViewMapper,
     private val novoTopicoMapper: NovoTopicoMapper,
     private val notFoundMessage: String = "Topico não Encontrado",
-    private val em: EntityManager //interface usada para interagir com o banco de dados, como inserção, atualização, exclusão e busca de entidades no banco de dados
+    private val em: EntityManager
 ) {
 
     fun listar(
@@ -48,7 +48,7 @@ class TopicoService(
         val topico = novoTopicoMapper.map(dto)
         topicoRepository.save(topico)
 
-        //plus é usada para concatenar coleções, como listas, conjuntos ou arrays
+        //plus é usada para concatenar coleções
         //topicos = topicos.plus(topico)
 
         return topicoViewMapper.map(topico)
@@ -74,5 +74,4 @@ class TopicoService(
     fun relatorio(): List<TopicoPorCategoriaDTO>{
        return topicoRepository.relatorio()
     }
-
 }

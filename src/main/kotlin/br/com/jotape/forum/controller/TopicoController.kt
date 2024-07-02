@@ -29,15 +29,15 @@ import org.springframework.web.util.UriComponentsBuilder
 
 @RestController
 @RequestMapping("/topicos")
-//(private val service: TopicoService) -> instância a classe service
-class TopicoController(private val service: TopicoService) { //Declara no construtor e o Spring injeta automaticamente essa classe
+class TopicoController(private val service: TopicoService) {
 
     @GetMapping
     @Cacheable("topicos")
     @CacheEvict(value = ["topicos"], allEntries = true)
     fun listar(
         @RequestParam(required = false) nomeCurso: String?,
-       @PageableDefault(size = 5, sort = ["dataCriacao"], direction = Sort.Direction.DESC) paginacao: Pageable
+        @PageableDefault(size = 5, sort = ["dataCriacao"], direction = Sort.Direction.DESC) paginacao: Pageable
+
     ): Page<TopicoDTO> {
         return service.listar(nomeCurso, paginacao)
     }
@@ -52,6 +52,7 @@ class TopicoController(private val service: TopicoService) { //Declara no constr
     fun cadastrar(
         @RequestBody @Valid dto: NovoTopicoDTO,
         uriBuilder: UriComponentsBuilder
+
     ): ResponseEntity<TopicoDTO> {
         val topicoDTO = service.cadastrar(dto)
         val uri = uriBuilder.path("/topicos/${topicoDTO.id}").build().toUri()

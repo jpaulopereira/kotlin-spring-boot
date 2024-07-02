@@ -4,6 +4,7 @@ import br.com.jotape.forum.model.StatusTopico
 import java.time.LocalDateTime
 
 data class TopicoDTO(
+
     val id: Long?,
     val titulo: String,
     val mensagem: String,

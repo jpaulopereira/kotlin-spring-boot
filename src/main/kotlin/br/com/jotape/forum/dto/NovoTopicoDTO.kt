@@ -13,7 +13,7 @@ data class NovoTopicoDTO(
     @field:NotEmpty
     val mensagem: String,
 
-    @field:NotNull //usar notNull em id
+    @field:NotNull
     val idCurso: Long,
 
     @field:NotNull
